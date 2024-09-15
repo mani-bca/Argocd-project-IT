@@ -71,7 +71,7 @@ argo-cd:
     persistence:
       storageClass: "standard" # This will be used if not overridden in individual components
 
-  # Optional: Configure your own PV if you don't want to use dynamic provisioning
+  # Optional: Configure your own PV if you don't want to use dynamic provisioning pv
   persistence:
     volumeClaimTemplate:
       spec:
