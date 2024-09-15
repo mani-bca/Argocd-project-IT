@@ -8,3 +8,42 @@ argo-cd:
   server:
     extraArgs:
       - --insecure
+ # Redis configuration
+  redis:
+    enabled: true
+    persistence:
+      enabled: true
+      storageClass: "standard" # Adjust this to your desired storage class
+      accessMode: ReadWriteOnce
+      size: 8Gi
+
+  # Repo Server configuration
+  repoServer:
+    persistence:
+      enabled: true
+      storageClass: "standard" # Adjust this to your desired storage class
+      accessMode: ReadWriteOnce
+      size: 10Gi
+
+  # Application Controller configuration
+  controller:
+    persistence:
+      enabled: true
+      storageClass: "standard" # Adjust this to your desired storage class
+      accessMode: ReadWriteOnce
+      size: 10Gi
+
+  # Global Persistence Configuration (optional)
+  global:
+    persistence:
+      storageClass: "standard" # This will be used if not overridden in individual components
+
+  # Optional: Configure your own PV if you don't want to use dynamic provisioning
+  persistence:
+    volumeClaimTemplate:
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "standard" # Adjust this to your desired storage class
+        resources:
+          requests:
+            storage: 10Gi
