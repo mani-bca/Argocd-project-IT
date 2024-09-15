@@ -8,75 +8,20 @@ argo-cd:
   server:
     extraArgs:
       - --insecure
- # Redis configuration
-argo-cd:
-  dex:
-    enabled: false
-  notifications:
-    enabled: false
-  applicationSet:
-    enabled: false
-  server:
-    extraArgs:
-      - --insecure
+  controller:
+    persistence:
+      enabled: true
+      size: 10Gi               # Size of the Persistent Volume
+      storageClassName: gp2     # Set this according to your storage class
+      accessModes:
+        - ReadWriteOnce
+      annotations: {}
 
-  # Redis configuration
   redis:
     enabled: true
     persistence:
       enabled: true
-      storageClass: "standard" # Adjust this to your desired storage class
-      accessMode: ReadWriteOnce
-      size: 8Gi
-    volumes:
-      - name: redis-data
-        persistentVolumeClaim:
-          claimName: argocd-redis-pvc
-    volumeMounts:
-      - name: redis-data
-        mountPath: /data
-
-  # Repo Server configuration
-  repoServer:
-    volumes:
-      - name: repo-data
-        persistentVolumeClaim:
-          claimName: argocd-repo-server-pvc
-    volumeMounts:
-      - name: repo-data
-        mountPath: /app/config/repo-server
-    persistence:
-      enabled: true
-      storageClass: "standard" # Adjust this to your desired storage class
-      accessMode: ReadWriteOnce
-      size: 10Gi
-
-  # Application Controller configuration
-  controller:
-    volumes:
-      - name: controller-data
-        persistentVolumeClaim:
-          claimName: argocd-controller-pvc
-    volumeMounts:
-      - name: controller-data
-        mountPath: /app/config/controller
-    persistence:
-      enabled: true
-      storageClass: "standard" # Adjust this to your desired storage class
-      accessMode: ReadWriteOnce
-      size: 10Gi
-
-  # Global Persistence Configuration (optional)
-  global:
-    persistence:
-      storageClass: "standard" # This will be used if not overridden in individual components
-
-  # Optional: Configure your own PV if you don't want to use dynamic provisioning pv
-  persistence:
-    volumeClaimTemplate:
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        storageClassName: "standard" # Adjust this to your desired storage class
-        resources:
-          requests:
-            storage: 10Gi
+      size: 5Gi                # Size for Redis Persistent Volume
+      storageClassName: gp2     # Set this according to your storage class
+      accessModes:
+        - ReadWriteOnce
