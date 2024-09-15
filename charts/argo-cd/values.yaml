@@ -9,6 +9,18 @@ argo-cd:
     extraArgs:
       - --insecure
  # Redis configuration
+argo-cd:
+  dex:
+    enabled: false
+  notifications:
+    enabled: false
+  applicationSet:
+    enabled: false
+  server:
+    extraArgs:
+      - --insecure
+
+  # Redis configuration
   redis:
     enabled: true
     persistence:
@@ -16,9 +28,23 @@ argo-cd:
       storageClass: "standard" # Adjust this to your desired storage class
       accessMode: ReadWriteOnce
       size: 8Gi
+    volumes:
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: argocd-redis-pvc
+    volumeMounts:
+      - name: redis-data
+        mountPath: /data
 
   # Repo Server configuration
   repoServer:
+    volumes:
+      - name: repo-data
+        persistentVolumeClaim:
+          claimName: argocd-repo-server-pvc
+    volumeMounts:
+      - name: repo-data
+        mountPath: /app/config/repo-server
     persistence:
       enabled: true
       storageClass: "standard" # Adjust this to your desired storage class
@@ -27,6 +53,13 @@ argo-cd:
 
   # Application Controller configuration
   controller:
+    volumes:
+      - name: controller-data
+        persistentVolumeClaim:
+          claimName: argocd-controller-pvc
+    volumeMounts:
+      - name: controller-data
+        mountPath: /app/config/controller
     persistence:
       enabled: true
       storageClass: "standard" # Adjust this to your desired storage class
